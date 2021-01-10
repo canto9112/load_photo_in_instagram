@@ -27,9 +27,9 @@ def fetch_spacex_last_launch(url, flight_number, name_folder, template_file_name
 
 
 if __name__ == "__main__":
-    url = 'https://api.spacexdata.com/v3/launches'
+    url_spacex_api = 'https://api.spacexdata.com/v3/launches'
     flight_number = '108'
     name_folder = "images"
     template_file_name = 'spacex-{}.jpg'
 
-    fetch_spacex_last_launch(url, flight_number, name_folder, template_file_name)
+    fetch_spacex_last_launch(url_spacex_api, flight_number, name_folder, template_file_name)
