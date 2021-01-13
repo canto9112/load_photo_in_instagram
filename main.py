@@ -43,22 +43,48 @@ def get_file_extension(url):
 def safe_image_hubble(url, name_folder, template_file_name, extension):
     response = requests.get(url, verify=False)
     response.raise_for_status()
-    Path(name_folder).mkdir(parents=True, exist_ok=True)
-    filename = template_file_name + extension
-    path = Path.cwd() / name_folder / filename
-    with open(path, 'wb') as file:
-        file.write(response.content)
+    if extension != '.tif':
+        Path(name_folder).mkdir(parents=True, exist_ok=True)
+        print('template_file_name -', template_file_name)
+        print('extension -', extension)
+        filename = str(template_file_name) + extension
+        path = Path.cwd() / name_folder / filename
+        with open(path, 'wb') as file:
+            file.write(response.content)
+    else:
+        Path('tif').mkdir(parents=True, exist_ok=True)
+        filename = str(template_file_name) + extension
+        path = Path.cwd() / 'tif' / filename
+        with open(path, 'wb') as file:
+            file.write(response.content)
+        print(extension, '= .tif')
+
+
+def get_images_id_habble(url):
+    params = {'page': 'all',
+              'collection_name': 'spacecraft'}
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    response_json = response.json()
+    images_id = []
+    for id in response_json:
+        images_id.append(id['id'])
+    return images_id
 
 
 if __name__ == "__main__":
-    url_spacex_api = 'https://api.spacexdata.com/v3/launches'
-    spacex_flight_number = '108'
+    # url_spacex_api = 'https://api.spacexdata.com/v3/launches'
+    # spacex_flight_number = '108'
     name_folder = "images"
-    spacex_template_file_name = 'spacex-{}.jpg'
-    fetch_spacex_last_launch(url_spacex_api, spacex_flight_number, name_folder, spacex_template_file_name)
+    # spacex_template_file_name = 'spacex-{}.jpg'
+    # fetch_spacex_last_launch(url_spacex_api, spacex_flight_number, name_folder, spacex_template_file_name)
 
-    habble_id_image = '1'
-    url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(habble_id_image)
-    url_image_habble = get_images_habble(url_habble_api)
-    file_extension_habbble_image = get_file_extension(url_image_habble)
-    safe_image_hubble(url_image_habble, name_folder, habble_id_image, file_extension_habbble_image)
+    url_habble_collections_api = 'http://hubblesite.org/api/v3/images'
+
+    habble_id_image = get_images_id_habble(url_habble_collections_api)
+    for id in habble_id_image:
+        url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(id)
+        url_image_habble = get_images_habble(url_habble_api)
+        file_extension_habbble_image = get_file_extension(url_image_habble)
+        safe_image_hubble(url_image_habble, name_folder, id, file_extension_habbble_image)
+        print(id, 'safe')
