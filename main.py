@@ -43,21 +43,11 @@ def get_file_extension(url):
 def safe_image_hubble(url, name_folder, template_file_name, extension):
     response = requests.get(url, verify=False)
     response.raise_for_status()
-    if extension != '.tif':
-        Path(name_folder).mkdir(parents=True, exist_ok=True)
-        print('template_file_name -', template_file_name)
-        print('extension -', extension)
-        filename = str(template_file_name) + extension
-        path = Path.cwd() / name_folder / filename
-        with open(path, 'wb') as file:
-            file.write(response.content)
-    else:
-        Path('tif').mkdir(parents=True, exist_ok=True)
-        filename = str(template_file_name) + extension
-        path = Path.cwd() / 'tif' / filename
-        with open(path, 'wb') as file:
-            file.write(response.content)
-        print(extension, '= .tif')
+    Path(name_folder).mkdir(parents=True, exist_ok=True)
+    filename = str(template_file_name) + extension
+    path = Path.cwd() / name_folder / filename
+    with open(path, 'wb') as file:
+        file.write(response.content)
 
 
 def get_images_id_habble(url):
@@ -86,5 +76,9 @@ if __name__ == "__main__":
         url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(id)
         url_image_habble = get_images_habble(url_habble_api)
         file_extension_habbble_image = get_file_extension(url_image_habble)
-        safe_image_hubble(url_image_habble, name_folder, id, file_extension_habbble_image)
-        print(id, 'safe')
+        if file_extension_habbble_image != '.tif':
+            safe_image_hubble(url_image_habble, name_folder, id, file_extension_habbble_image)
+            print(id, 'safe')
+        else:
+            print(file_extension_habbble_image, 'file .tif dont safe')
+            continue
