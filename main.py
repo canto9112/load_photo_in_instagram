@@ -1,6 +1,9 @@
 import requests
 from pathlib import Path
+from PIL import Image
 from pprint import pprint
+import os
+from instabot import Bot
 
 
 def save_image(url, path):
@@ -61,6 +64,20 @@ def get_images_id_habble(url):
         images_id.append(id['id'])
     return images_id
 
+def crop_save_image(name_folder):
+    images = os.listdir(path=name_folder)
+    Path('new_images').mkdir(parents=True, exist_ok=True)
+    for image in images:
+        open_image = Image.open("images/{}".format(image))
+        open_image.thumbnail((1080, 1080))
+        image = image.replace('.', '')
+        open_image.save(f'new_images/{image}.jpg', 'JPEG')
+
+# def upload_images():
+#     bot = Bot()
+#     bot.login(username="douglas_daniela2477", password="life_life605_")
+#     bot.upload_photo("new_images/spacex-2jpg.jpg", caption="habble it's  very nice!")
+
 
 if __name__ == "__main__":
     # url_spacex_api = 'https://api.spacexdata.com/v3/launches'
@@ -82,3 +99,8 @@ if __name__ == "__main__":
         else:
             print(file_extension_habbble_image, 'file .tif dont safe')
             continue
+
+    try:
+        crop_save_image(name_folder)
+    except OSError:
+        print('OSError')
