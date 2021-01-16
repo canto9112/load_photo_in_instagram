@@ -6,10 +6,9 @@ import os
 from instabot import Bot
 
 
-def save_image(url, image_name):
-    response = requests.get(url)
+def save_image(url, image_name, name_folder):
+    response = requests.get(url, verify=False)
     response.raise_for_status()
-    name_folder = "images"
     Path(name_folder).mkdir(parents=True, exist_ok=True)
     path = Path.cwd() / name_folder / image_name
     content = response.content
@@ -41,7 +40,7 @@ def fetch_spacex_last_launch(url, flight_number):
 
 
 def get_images_habble(url):
-    response = requests.get(url)
+    response = requests.get(url, verify=False)
     response.raise_for_status()
     image_files = response.json()['image_files']
     for image in image_files:
@@ -54,14 +53,14 @@ def get_file_extension(url):
     return extension
 
 
-def safe_image_hubble(url, name_folder, template_file_name, extension):
-    response = requests.get(url, verify=False)
-    response.raise_for_status()
-    Path(name_folder).mkdir(parents=True, exist_ok=True)
-    filename = str(template_file_name) + extension
-    path = Path.cwd() / name_folder / filename
-    with open(path, 'wb') as file:
-        file.write(response.content)
+# def safe_image_hubble(url, name_folder, template_file_name, extension):
+#     response = requests.get(url, verify=False)
+#     response.raise_for_status()
+#     Path(name_folder).mkdir(parents=True, exist_ok=True)
+#     filename = str(template_file_name) + extension
+#     path = Path.cwd() / name_folder / filename
+#     with open(path, 'wb') as file:
+#         file.write(response.content)
 
 
 def get_images_id_habble(url):
@@ -78,12 +77,25 @@ def get_images_id_habble(url):
 
 def crop_save_image(name_folder):
     images = os.listdir(path=name_folder)
-    Path('new_images').mkdir(parents=True, exist_ok=True)
     for image in images:
+        extansion = image[-4:]
+        image_name = image.replace(extansion, '')
         open_image = Image.open("images/{}".format(image))
         open_image.thumbnail((1080, 1080))
-        image = image.replace('.', '')
-        open_image.save(f'new_images/{image}.jpg', 'JPEG')
+        path = Path.cwd() / name_folder / image_name
+        if open_image.mode != 'RGB':
+            ycbcr_image = open_image.convert('YCbCr')
+            ycbcr_image.save(f'{path}.jpg', 'JPEG')
+        else:
+            open_image.save(f'{path}.jpg', 'JPEG')
+
+def remove_not_jpg(name_folder):
+    images = os.listdir(path=name_folder)
+    for image in images:
+        extansion = image[-4:]
+        if extansion != '.jpg':
+            file_path = str(name_folder) + f'/{image}'
+            os.remove(file_path)
 
 
 def upload_images():
@@ -93,31 +105,28 @@ def upload_images():
 
 
 if __name__ == "__main__":
+    name_folder = "images"
     # save images spaceX
-    url_spacex_api = 'https://api.spacexdata.com/v3/launches'
-    spacex_flight_number = '108'
-    spacex_template_file_name = 'spacex-{}.jpg'
-    url_spacex = fetch_spacex_last_launch(url_spacex_api, spacex_flight_number)
-    for link_number, link in enumerate(url_spacex):
-        filename = spacex_template_file_name.format(link_number)
-        save_image(link, filename)
-
-
-
-    url_habble_collections_api = 'http://hubblesite.org/api/v3/images'
+    # url_spacex_api = 'https://api.spacexdata.com/v3/launches'
+    # spacex_flight_number = '108'
+    # spacex_template_file_name = 'spacex-{}.jpg'
+    # url_spacex = fetch_spacex_last_launch(url_spacex_api, spacex_flight_number)
+    # for link_number, link in enumerate(url_spacex):
+    #     filename = spacex_template_file_name.format(link_number)
+    #     save_image(link, filename, name_folder)
+    #     print('save', link_number, filename, 'image')
+    #
+    # # save images HABBLE
+    # url_habble_collections_api = 'http://hubblesite.org/api/v3/images'
     # habble_id_image = get_images_id_habble(url_habble_collections_api)
-    # for id in habble_id_image:
-    #     url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(id)
+    # # habble_template_file_name = 'habble-{}.jpg'
+    # for link_number, link in enumerate(habble_id_image):
+    #     url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(link)
     #     url_image_habble = get_images_habble(url_habble_api)
     #     file_extension_habbble_image = get_file_extension(url_image_habble)
-    #     if file_extension_habbble_image != '.tif':
-    #         safe_image_hubble(url_image_habble, name_folder, id, file_extension_habbble_image)
-    #         print(id, 'safe')
-    #     else:
-    #         print(file_extension_habbble_image, 'file .tif dont safe')
-    #         continue
+    #     filename = (f'habble-{link_number}{file_extension_habbble_image}')
+    #     save_image(url_image_habble, filename, name_folder)
+    #     print('save', link_number, filename, 'image')
     #
-    # try:
-    #     crop_save_image(name_folder)
-    # except OSError:
-    #     print('OSError')
+    # crop_save_image(name_folder)
+    remove_not_jpg(name_folder)
