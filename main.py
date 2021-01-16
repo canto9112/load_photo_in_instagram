@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 from instabot import Bot
 import time
+import shutil
 
 
 def save_image(url, image_name, name_folder):
@@ -52,14 +53,15 @@ def get_images_id_habble(url):
     return images_id
 
 
-def crop_save_image(name_folder):
+def crop_save_image(name_folder, upload_folder):
     images = os.listdir(path=name_folder)
     for image in images:
         extansion = image[-4:]
         image_name = image.replace(extansion, '')
         open_image = Image.open("images/{}".format(image))
         open_image.thumbnail((1080, 1080))
-        path = Path.cwd() / name_folder / image_name
+        Path(upload_folder).mkdir(parents=True, exist_ok=True)
+        path = Path.cwd() / upload_folder / image_name
         if open_image.mode != 'RGB':
             ycbcr_image = open_image.convert('YCbCr')
             ycbcr_image.save(f'{path}.jpg', 'JPEG')
@@ -67,13 +69,9 @@ def crop_save_image(name_folder):
             open_image.save(f'{path}.jpg', 'JPEG')
 
 
-def remove_not_jpg(name_folder):
-    images = os.listdir(path=name_folder)
-    for image in images:
-        extansion = image[-4:]
-        if extansion != '.jpg':
-            file_path = str(name_folder) + f'/{image}'
-            os.remove(file_path)
+def del_folder(name_folder):
+        file_path = Path(name_folder)
+        shutil.rmtree(file_path)
 
 
 def upload_images(name_folder):
@@ -91,6 +89,7 @@ def upload_images(name_folder):
 if __name__ == "__main__":
     load_dotenv()
     name_folder = "images"
+    upload_folder = 'uploads_images'
     # save images spaceX
     url_spacex_api = 'https://api.spacexdata.com/v3/launches'
     spacex_flight_number = '108'
@@ -100,8 +99,7 @@ if __name__ == "__main__":
         filename = spacex_template_file_name.format(link_number)
         save_image(link, filename, name_folder)
         print('save', link_number, filename, 'image')
-
-    # # save images HABBLE
+    # save images HABBLE
     url_habble_collections_api = 'http://hubblesite.org/api/v3/images'
     habble_id_image = get_images_id_habble(url_habble_collections_api)
     habble_template_file_name = 'habble-{}.jpg'
@@ -112,10 +110,9 @@ if __name__ == "__main__":
         filename = (f'habble-{link_number}{file_extension_habbble_image}')
         save_image(url_image_habble, filename, name_folder)
         print('save', link_number, filename, 'image')
-
-    # # cropped images
-    crop_save_image(name_folder)
-    # # remove image not .jpg
-    remove_not_jpg(name_folder)
-    #
-    upload_images(name_folder)
+    # cropped images
+    crop_save_image(name_folder, upload_folder)
+    # remove image not .jpg
+    del_folder(name_folder)
+    # uploads images
+    upload_images(upload_folder)
