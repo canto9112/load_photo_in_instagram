@@ -3,7 +3,9 @@ from pathlib import Path
 from PIL import Image
 from pprint import pprint
 import os
+from dotenv import load_dotenv
 from instabot import Bot
+import time
 
 
 def save_image(url, image_name, name_folder):
@@ -98,13 +100,20 @@ def remove_not_jpg(name_folder):
             os.remove(file_path)
 
 
-def upload_images():
+def upload_images(name_folder):
+    password_inst = os.getenv('password_inst')
+    login_inst = os.getenv('login_inst')
+    images = os.listdir(path=name_folder)
     bot = Bot()
-    bot.login(username="douglas_daniela2477", password="life_life605_")
-    bot.upload_photo("new_images/spacex-2jpg.jpg", caption="habble it's  very nice!")
+    bot.login(username=login_inst, password=password_inst)
+    for image in images:
+        bot.upload_photo(str(name_folder) + f'/{image}')
+        print(image, 'Опубликована')
+        time.sleep(60)
 
 
 if __name__ == "__main__":
+    load_dotenv()
     name_folder = "images"
     # save images spaceX
     # url_spacex_api = 'https://api.spacexdata.com/v3/launches'
@@ -128,5 +137,9 @@ if __name__ == "__main__":
     #     save_image(url_image_habble, filename, name_folder)
     #     print('save', link_number, filename, 'image')
     #
+    # cropped images
     # crop_save_image(name_folder)
-    remove_not_jpg(name_folder)
+    # # remove image not .jpg
+    # remove_not_jpg(name_folder)
+
+    upload_images(name_folder)
