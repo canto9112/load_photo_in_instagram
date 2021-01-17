@@ -1,5 +1,7 @@
 import requests
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 
 def get_link_last_image(url):
@@ -39,8 +41,9 @@ def save_image(url, image_name, folder_name):
 
 
 def start():
+    load_dotenv()
     folder_saving_images = "images"
-    habble_collection_name = 'spacecraft'
+    habble_collection_name = os.getenv('HABBLE_COLLECTION_NAME')
     url_habble_collections_api = 'http://hubblesite.org/api/v3/images'
     id_images_habble = get_id_images_habble(url_habble_collections_api, habble_collection_name)
     for link_number, link in enumerate(id_images_habble):
