@@ -74,8 +74,8 @@ def delete_folder(name_folder):
 
 
 def upload_file(name_folder):
-    password_inst = os.getenv('password_inst')
-    login_inst = os.getenv('login_inst')
+    password_inst = os.getenv('PASSWORD_INST')
+    login_inst = os.getenv('LOGIN_INST')
     folder_contents = os.listdir(path=name_folder)
     bot = Bot()
     bot.login(username=login_inst, password=password_inst)
