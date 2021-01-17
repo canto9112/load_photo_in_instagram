@@ -1,7 +1,6 @@
 import requests
 from pathlib import Path
 from PIL import Image
-from pprint import pprint
 import os
 from dotenv import load_dotenv
 from instabot import Bot
@@ -9,110 +8,107 @@ import time
 import shutil
 
 
-def save_image(url, image_name, name_folder):
+def fetch_spacex_last_launch(url, flight_number):
+    params = {'flight_number': flight_number}
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    links_images = response.json()[0]['links']['flickr_images']
+    return links_images
+
+
+def get_link_last_image(url):
+    response = requests.get(url, verify=False)
+    response.raise_for_status()
+    image_files = response.json()['image_files']
+    for image in image_files:
+        link_last_image = ('http:'+image['file_url'])
+    return link_last_image
+
+
+def get_id_images_habble(url, collection_name):
+    params = {'page': 'all',
+              'collection_name': collection_name}
+    response = requests.get(url, params=params)
+    response.raise_for_status()
+    collection_contents = response.json()
+    id_images = []
+    for id in collection_contents:
+        id_images.append(id['id'])
+    return id_images
+
+
+def get_file_extension(url):
+    file_extension = ('.' + url.split('.')[-1])
+    return file_extension
+
+
+def save_image(url, image_name, folder_name):
     response = requests.get(url, verify=False)
     response.raise_for_status()
     Path(name_folder).mkdir(parents=True, exist_ok=True)
-    path = Path.cwd() / name_folder / image_name
+    path = Path.cwd() / folder_name / image_name
     content = response.content
     with open(path, 'wb') as file:
         file.write(content)
 
 
-def fetch_spacex_last_launch(url, flight_number):
-    params = {'flight_number': flight_number}
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    links_image = response.json()[0]['links']['flickr_images']
-    return links_image
-
-
-def get_images_habble(url):
-    response = requests.get(url, verify=False)
-    response.raise_for_status()
-    image_files = response.json()['image_files']
-    for image in image_files:
-        last_image_url = ('http:'+image['file_url'])
-    return last_image_url
-
-
-def get_file_extension(url):
-    extension = ('.' + url.split('.')[-1])
-    return extension
-
-
-def get_images_id_habble(url):
-    params = {'page': 'all',
-              'collection_name': 'spacecraft'}
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    response_json = response.json()
-    images_id = []
-    for id in response_json:
-        images_id.append(id['id'])
-    return images_id
-
-
-def crop_save_image(name_folder, upload_folder):
-    images = os.listdir(path=name_folder)
-    for image in images:
-        extansion = image[-4:]
-        image_name = image.replace(extansion, '')
-        open_image = Image.open("images/{}".format(image))
-        open_image.thumbnail((1080, 1080))
+def adjust_and_save_image(name_folder, upload_folder):
+    content = os.listdir(path=name_folder)
+    for file in content:
+        file_extansion = file[-4:]
+        file_name = file.replace(file_extansion, '')
+        image = Image.open("images/{}".format(file))
+        image.thumbnail((1080, 1080))
         Path(upload_folder).mkdir(parents=True, exist_ok=True)
-        path = Path.cwd() / upload_folder / image_name
-        if open_image.mode != 'RGB':
-            ycbcr_image = open_image.convert('YCbCr')
+        path = Path.cwd() / upload_folder / file_name
+        if image.mode != 'RGB':
+            ycbcr_image = image.convert('YCbCr')
             ycbcr_image.save(f'{path}.jpg', 'JPEG')
         else:
-            open_image.save(f'{path}.jpg', 'JPEG')
+            image.save(f'{path}.jpg', 'JPEG')
 
 
-def del_folder(name_folder):
-        file_path = Path(name_folder)
-        shutil.rmtree(file_path)
+def delete_folder(name_folder):
+    folder_path = Path(name_folder)
+    shutil.rmtree(folder_path)
 
 
-def upload_images(name_folder):
+def upload_file(name_folder):
     password_inst = os.getenv('password_inst')
     login_inst = os.getenv('login_inst')
-    images = os.listdir(path=name_folder)
+    folder_contents = os.listdir(path=name_folder)
     bot = Bot()
     bot.login(username=login_inst, password=password_inst)
-    for image in images:
-        bot.upload_photo(str(name_folder) + f'/{image}')
-        print(image, 'Опубликована')
+    for file in folder_contents:
+        bot.upload_photo(str(name_folder) + f'/{file}')
         time.sleep(60)
 
 
 if __name__ == "__main__":
     load_dotenv()
-    name_folder = "images"
-    upload_folder = 'uploads_images'
-    # save images spaceX
+    folder_saving_images = "images"
+    folder_uploading_instsgram = 'uploads_images'
     url_spacex_api = 'https://api.spacexdata.com/v3/launches'
     spacex_flight_number = '108'
     spacex_template_file_name = 'spacex-{}.jpg'
-    url_spacex = fetch_spacex_last_launch(url_spacex_api, spacex_flight_number)
-    for link_number, link in enumerate(url_spacex):
-        filename = spacex_template_file_name.format(link_number)
-        save_image(link, filename, name_folder)
-        print('save', link_number, filename, 'image')
-    # save images HABBLE
+
+    url_spacex_last_launch = fetch_spacex_last_launch(url_spacex_api, spacex_flight_number)
+    for link_number, link in enumerate(url_spacex_last_launch):
+        spacex_image_name = spacex_template_file_name.format(link_number)
+        save_image(link, spacex_image_name, folder_saving_images)
+
+    habble_collection_name = 'spacecraft'
     url_habble_collections_api = 'http://hubblesite.org/api/v3/images'
-    habble_id_image = get_images_id_habble(url_habble_collections_api)
+    id_images_habble = get_id_images_habble(url_habble_collections_api, habble_collection_name)
     habble_template_file_name = 'habble-{}.jpg'
-    for link_number, link in enumerate(habble_id_image):
+
+    for link_number, link in enumerate(id_images_habble):
         url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(link)
-        url_image_habble = get_images_habble(url_habble_api)
-        file_extension_habbble_image = get_file_extension(url_image_habble)
-        filename = (f'habble-{link_number}{file_extension_habbble_image}')
-        save_image(url_image_habble, filename, name_folder)
-        print('save', link_number, filename, 'image')
-    # cropped images
-    crop_save_image(name_folder, upload_folder)
-    # remove image not .jpg
-    del_folder(name_folder)
-    # uploads images
-    upload_images(upload_folder)
+        link_last_image = get_link_last_image(url_habble_api)
+        file_extension_image_habbble = get_file_extension(link_last_image)
+        habble_image_name = (f'habble-{link_number}{file_extension_image_habbble}')
+        save_image(link_last_image, habble_image_name, folder_saving_images)
+
+    adjust_and_save_image(folder_saving_images, folder_uploading_instsgram)
+    delete_folder(folder_saving_images)
+    upload_file(folder_uploading_instsgram)
