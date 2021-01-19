@@ -27,8 +27,8 @@ def get_id_images_habble(url, collection_name):
 
 
 def get_file_extension(url):
-    file_extension = ('.' + url.split('.')[-1])
-    return file_extension
+    name, extension = os.path.splitext(url)
+    return extension
 
 
 def get_images_habble():
