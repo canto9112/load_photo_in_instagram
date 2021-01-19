@@ -9,9 +9,9 @@ import shutil
 def adjust_and_save_images(images_folder, upload_folder):
     content = os.listdir(path=images_folder)
     for file in content:
-        file_extansion = file[-4:]
-        file_name = file.replace(file_extansion, '')
-        image = Image.open(str(images_folder + f"/{file}"))
+        name, extension = os.path.splitext(file)
+        file_name = file.replace(extension, '')
+        image = Image.open(f'{images_folder}/{file}')
         image.thumbnail((1080, 1080))
         Path(upload_folder).mkdir(parents=True, exist_ok=True)
         path = Path.cwd() / upload_folder / file_name
