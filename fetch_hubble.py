@@ -1,6 +1,5 @@
 import requests
 import os
-from dotenv import load_dotenv
 import utils
 
 
@@ -26,7 +25,6 @@ def get_id_images_habble(url, collection_name):
 
 
 def get_images_habble():
-    load_dotenv()
     folder_saving_images = "images"
     habble_collection_name = os.getenv('HABBLE_COLLECTION_NAME')
     url_habble_collections_api = 'http://hubblesite.org/api/v3/images'

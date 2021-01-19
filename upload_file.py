@@ -1,7 +1,6 @@
 from pathlib import Path
 from PIL import Image
 import os
-from dotenv import load_dotenv
 from instabot import Bot
 import time
 import shutil
@@ -40,7 +39,6 @@ def upload_file(name_folder):
 
 
 def start_uploading_images():
-    load_dotenv()
     folder_saving_images = "images"
     folder_uploading_instsgram = 'images_to_download'
 
