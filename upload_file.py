@@ -6,7 +6,7 @@ import time
 import shutil
 
 
-def adjust_and_save_image(folder_images, folder_upload):
+def adjust_and_save_images(folder_images, folder_upload):
     content = os.listdir(path=folder_images)
     for file in content:
         file_extansion = file[-4:]
@@ -27,7 +27,7 @@ def delete_folder(folder):
     shutil.rmtree(folder_path)
 
 
-def upload_file(folder):
+def upload_images(folder):
     password_inst = os.getenv('ISTAGRAM_PASSWORD')
     login_inst = os.getenv('INSTAGRAM_LOGIN')
     folder_contents = os.listdir(path=folder)
@@ -41,7 +41,6 @@ def upload_file(folder):
 def start_uploading_images():
     folder_images = "images"
     folder_uploading_instagram = 'images_to_download'
-
-    adjust_and_save_image(folder_images, folder_uploading_instagram)
+    adjust_and_save_images(folder_images, folder_uploading_instagram)
     delete_folder(folder_images)
-    upload_file(folder_uploading_instagram)
+    upload_images(folder_uploading_instagram)
