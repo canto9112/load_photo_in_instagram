@@ -5,16 +5,16 @@ import utils
 def fetch_spacex_last_launch(url):
     response = requests.get(url)
     response.raise_for_status()
-    links_images = response.json()[0]['links']['flickr_images']
-    return links_images
+    image_links = response.json()[0]['links']['flickr_images']
+    return image_links
 
 
-def get_images_spacex():
+def get_spacex_images():
     folder_saving_images = "images"
-    url_latests_launch_api = 'https://api.spacexdata.com/v3/launches/latest'
+    latests_launch_api_url = 'https://api.spacexdata.com/v3/launches/latest'
     spacex_template_file_name = 'spacex-{}.jpg'
-    url_spacex_last_launch = fetch_spacex_last_launch(url_latests_launch_api)
-    for link_number, link in enumerate(url_spacex_last_launch):
+    spacex_last_launch_url = fetch_spacex_last_launch(latests_launch_api_url)
+    for link_number, link in enumerate(spacex_last_launch_url):
         spacex_image_name = spacex_template_file_name.format(link_number)
         utils.create_folder_save_images(folder_saving_images)
         utils.save_image(link, spacex_image_name, folder_saving_images)
