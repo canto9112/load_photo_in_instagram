@@ -34,7 +34,7 @@ def upload_file(folder):
     bot = Bot()
     bot.login(username=login_inst, password=password_inst)
     for file in folder_contents:
-        bot.upload_photo(str(folder) + f'/{file}')
+        bot.upload_photo(f'{folder}/{file}')
         time.sleep(60)
 
 
