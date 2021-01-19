@@ -6,15 +6,15 @@ import time
 import shutil
 
 
-def adjust_and_save_images(folder_images, folder_upload):
-    content = os.listdir(path=folder_images)
+def adjust_and_save_images(images_folder, upload_folder):
+    content = os.listdir(path=images_folder)
     for file in content:
         file_extansion = file[-4:]
         file_name = file.replace(file_extansion, '')
-        image = Image.open(str(folder_images + f"/{file}"))
+        image = Image.open(str(images_folder + f"/{file}"))
         image.thumbnail((1080, 1080))
-        Path(folder_upload).mkdir(parents=True, exist_ok=True)
-        path = Path.cwd() / folder_upload / file_name
+        Path(upload_folder).mkdir(parents=True, exist_ok=True)
+        path = Path.cwd() / upload_folder / file_name
         if image.mode != 'RGB':
             ycbcr_image = image.convert('YCbCr')
             ycbcr_image.save(f'{path}.jpg', 'JPEG')
@@ -30,17 +30,17 @@ def delete_folder(folder):
 def upload_images(folder):
     password_inst = os.getenv('ISTAGRAM_PASSWORD')
     login_inst = os.getenv('INSTAGRAM_LOGIN')
-    folder_contents = os.listdir(path=folder)
+    content = os.listdir(path=folder)
     bot = Bot()
     bot.login(username=login_inst, password=password_inst)
-    for file in folder_contents:
+    for file in content:
         bot.upload_photo(f'{folder}/{file}')
         time.sleep(60)
 
 
 def start_uploading_images():
-    folder_images = "images"
-    folder_uploading_instagram = 'images_to_download'
-    adjust_and_save_images(folder_images, folder_uploading_instagram)
-    delete_folder(folder_images)
-    upload_images(folder_uploading_instagram)
+    images_folder = "images"
+    instagram_images_folder = 'images_to_download'
+    adjust_and_save_images(images_folder, instagram_images_folder)
+    delete_folder(images_folder)
+    upload_images(instagram_images_folder)
