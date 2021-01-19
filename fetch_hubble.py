@@ -26,11 +26,6 @@ def get_id_images_habble(url, collection_name):
     return id_images
 
 
-def get_file_extension(url):
-    name, extension = os.path.splitext(url)
-    return extension
-
-
 def get_images_habble():
     load_dotenv()
     folder_saving_images = "images"
@@ -40,7 +35,8 @@ def get_images_habble():
     for link_number, link in enumerate(id_images_habble):
         url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(link)
         link_last_image = get_link_last_image(url_habble_api)
-        file_extension_image_habbble = get_file_extension(link_last_image)
+        file_extension_image_habbble = utils.get_file_extension(link_last_image)
+
         habble_image_name = (f'habble-{link_number}{file_extension_image_habbble}')
         utils.create_folder_save_images(folder_saving_images)
         utils.save_image(link_last_image, habble_image_name, folder_saving_images)

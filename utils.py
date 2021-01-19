@@ -1,5 +1,6 @@
 import requests
 from pathlib import Path
+import os
 
 
 def create_folder_save_images(folder_name):
@@ -13,3 +14,8 @@ def save_image(url, image_name, folder_name):
     content = response.content
     with open(path, 'wb') as file:
         file.write(content)
+
+
+def get_file_extension(url):
+    name, extension = os.path.splitext(url)
+    return extension
