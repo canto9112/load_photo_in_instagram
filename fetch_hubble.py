@@ -42,4 +42,5 @@ def get_images_habble():
         link_last_image = get_link_last_image(url_habble_api)
         file_extension_image_habbble = get_file_extension(link_last_image)
         habble_image_name = (f'habble-{link_number}{file_extension_image_habbble}')
+        utils.create_folder_save_images(folder_saving_images)
         utils.save_image(link_last_image, habble_image_name, folder_saving_images)

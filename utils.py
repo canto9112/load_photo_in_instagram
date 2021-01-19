@@ -2,7 +2,7 @@ import requests
 from pathlib import Path
 
 
-def create_folder(folder_name):
+def create_folder_save_images(folder_name):
     Path(folder_name).mkdir(parents=True, exist_ok=True)
 
 
