@@ -1,5 +1,4 @@
 import requests
-from pathlib import Path
 import os
 from dotenv import load_dotenv
 import utils
@@ -21,8 +20,8 @@ def get_id_images_habble(url, collection_name):
     response.raise_for_status()
     collection_contents = response.json()
     id_images = []
-    for id in collection_contents:
-        id_images.append(id['id'])
+    for id_image in collection_contents:
+        id_images.append(id_image['id'])
     return id_images
 
 
@@ -36,7 +35,6 @@ def get_images_habble():
         url_habble_api = 'http://hubblesite.org/api/v3/image/{}'.format(link)
         link_last_image = get_link_last_image(url_habble_api)
         file_extension_image_habbble = utils.get_file_extension(link_last_image)
-
         habble_image_name = (f'habble-{link_number}{file_extension_image_habbble}')
         utils.create_folder_save_images(folder_saving_images)
         utils.save_image(link_last_image, habble_image_name, folder_saving_images)
