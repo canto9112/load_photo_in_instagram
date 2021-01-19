@@ -15,8 +15,8 @@ pip3 install -r requirements.txt
 Для работы скрипта нужно создать файл ```.env``` в директории где лежит скрипт.
 Этот файл хранит ваш логин и пароль токен от Инстаграм. Вставьте ваш логин/пароль в файл ```.env```:
 ```
-PASSWORD_INST = 'life_life60534_'
-LOGIN_INST = 'Douglas_Daniela242277'
+PASSWORD_INST='life_life60534_'
+LOGIN_INST='Douglas_Daniela242277'
 ```
 В файл ```.env``` также нужно вставить название коллекции Hubble. Вот некоторые названия коллекций:
 
@@ -28,7 +28,7 @@ LOGIN_INST = 'Douglas_Daniela242277'
 * “stsci_gallery”.
 
 ```
-HABBLE_COLLECTION_NAME = 'spacecraft'
+HABBLE_COLLECTION_NAME='spacecraft'
 ```
 
 ### Запуск скрипта
