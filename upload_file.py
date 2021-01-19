@@ -39,7 +39,7 @@ def upload_file(name_folder):
         time.sleep(60)
 
 
-def start():
+def start_uploading_images():
     load_dotenv()
     folder_saving_images = "images"
     folder_uploading_instsgram = 'images_to_download'

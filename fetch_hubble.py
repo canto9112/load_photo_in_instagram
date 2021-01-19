@@ -40,7 +40,7 @@ def save_image(url, image_name, folder_name):
         file.write(content)
 
 
-def start():
+def get_images_habble():
     load_dotenv()
     folder_saving_images = "images"
     habble_collection_name = os.getenv('HABBLE_COLLECTION_NAME')

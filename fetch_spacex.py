@@ -19,7 +19,7 @@ def save_image(url, image_name, folder_name):
         file.write(content)
 
 
-def start():
+def get_images_spacex():
     folder_saving_images = "images"
     url_latests_launch_api = 'https://api.spacexdata.com/v3/launches/latest'
     spacex_template_file_name = 'spacex-{}.jpg'
