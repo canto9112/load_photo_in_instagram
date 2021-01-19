@@ -2,6 +2,7 @@ import requests
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import utils
 
 
 def get_link_last_image(url):
@@ -51,4 +52,4 @@ def get_images_habble():
         link_last_image = get_link_last_image(url_habble_api)
         file_extension_image_habbble = get_file_extension(link_last_image)
         habble_image_name = (f'habble-{link_number}{file_extension_image_habbble}')
-        save_image(link_last_image, habble_image_name, folder_saving_images)
+        utils.save_image(link_last_image, habble_image_name, folder_saving_images)
