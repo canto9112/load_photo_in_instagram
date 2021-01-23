@@ -24,7 +24,7 @@ def get_habble_image_ids(url, collection_name):
     return image_ids
 
 
-def get_images_habble():
+def fetch_images_habble():
     images_folser = "images"
     habble_collection_name = os.getenv('HABBLE_COLLECTION_NAME')
     habble_collections_api_url = 'http://hubblesite.org/api/v3/images'

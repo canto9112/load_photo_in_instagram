@@ -9,7 +9,7 @@ def fetch_spacex_last_launch(url):
     return image_links
 
 
-def get_spacex_images():
+def fetch_spacex_images():
     folder_saving_images = "images"
     latests_launch_api_url = 'https://api.spacexdata.com/v3/launches/latest'
     spacex_template_file_name = 'spacex-{}.jpg'

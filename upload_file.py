@@ -27,7 +27,7 @@ def delete_folder(folder):
     shutil.rmtree(folder_path)
 
 
-def upload_images(folder):
+def upload_images_instagram(folder):
     password_inst = os.getenv('ISTAGRAM_PASSWORD')
     login_inst = os.getenv('INSTAGRAM_LOGIN')
     content = os.listdir(path=folder)
@@ -38,9 +38,9 @@ def upload_images(folder):
         time.sleep(60)
 
 
-def start_uploading_images():
+def uploading_images():
     images_folder = "images"
     instagram_images_folder = 'images_to_download'
     adjust_and_save_images(images_folder, instagram_images_folder)
     delete_folder(images_folder)
-    upload_images(instagram_images_folder)
+    upload_images_instagram(instagram_images_folder)
