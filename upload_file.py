@@ -20,11 +20,6 @@ def adjust_and_save_images(images_folder, upload_folder):
             image.save(f'{path}.jpg', 'JPEG')
 
 
-def delete_folder(folder):
-    folder_path = Path(folder)
-    shutil.rmtree(folder_path)
-
-
 def upload_images_instagram(folder):
     password_inst = os.getenv('ISTAGRAM_PASSWORD')
     login_inst = os.getenv('INSTAGRAM_LOGIN')
@@ -38,5 +33,4 @@ def upload_images_instagram(folder):
 
 def uploading_images(name_folder_save, name_folder_download):
     adjust_and_save_images(name_folder_save, name_folder_download)
-    delete_folder(name_folder_save)
     #upload_images_instagram(name_folder_download)

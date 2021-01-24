@@ -1,6 +1,7 @@
 import requests
 from pathlib import Path
 import os
+import shutil
 
 
 def save_image(url, image_name, folder_name):
@@ -15,3 +16,4 @@ def save_image(url, image_name, folder_name):
 def get_file_extension(url):
     name, extension = os.path.splitext(url)
     return extension
+
