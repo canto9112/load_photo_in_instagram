@@ -12,7 +12,6 @@ def adjust_and_save_images(images_folder, upload_folder):
         name, extension = os.path.splitext(filename)
         image = Image.open(f'{images_folder}/{filename}')
         image.thumbnail((1080, 1080))
-        Path(upload_folder).mkdir(parents=True, exist_ok=True)
         path = Path.cwd() / upload_folder / name
         if image.mode != 'RGB':
             ycbcr_image = image.convert('YCbCr')
@@ -40,4 +39,4 @@ def upload_images_instagram(folder):
 def uploading_images(name_folder_save, name_folder_download):
     adjust_and_save_images(name_folder_save, name_folder_download)
     delete_folder(name_folder_save)
-    upload_images_instagram(name_folder_download)
+    #upload_images_instagram(name_folder_download)

@@ -15,5 +15,4 @@ def fetch_spacex_images(name_folder_save):
     spacex_last_launch_url = fetch_spacex_last_launch(latests_launch_api_url)
     for link_number, link in enumerate(spacex_last_launch_url):
         spacex_image_name = spacex_template_file_name.format(link_number)
-        utils.create_folder_save_images(name_folder_save)
         utils.save_image(link, spacex_image_name, name_folder_save)
