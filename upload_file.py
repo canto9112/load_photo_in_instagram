@@ -37,9 +37,7 @@ def upload_images_instagram(folder):
         time.sleep(60)
 
 
-def uploading_images():
-    images_folder = "images"
-    instagram_images_folder = 'images_to_download'
-    adjust_and_save_images(images_folder, instagram_images_folder)
-    #delete_folder(images_folder)
-    #upload_images_instagram(instagram_images_folder)
+def uploading_images(name_folder_save, name_folder_download):
+    adjust_and_save_images(name_folder_save, name_folder_download)
+    delete_folder(name_folder_save)
+    upload_images_instagram(name_folder_download)
