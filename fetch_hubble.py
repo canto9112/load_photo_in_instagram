@@ -33,6 +33,6 @@ def fetch_images_habble():
         habble_api_url = 'http://hubblesite.org/api/v3/image/{}'.format(link)
         image_last_link = get_image_last_link(habble_api_url)
         file_extension = utils.get_file_extension(image_last_link)
-        habble_image_name = (f'habble-{link_number}{file_extension}')
+        habble_image_name = f'habble-{link_number}{file_extension}'
         utils.create_folder_save_images(images_folser)
         utils.save_image(image_last_link, habble_image_name, images_folser)
