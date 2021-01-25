@@ -18,9 +18,7 @@ def get_habble_image_ids(url, collection_name):
     response = requests.get(url, params=params)
     response.raise_for_status()
     collection_contents = response.json()
-    image_ids = []
-    for image_id in collection_contents:
-        image_ids.append(image_id['id'])
+    image_ids = [image_id['id'] for image_id in collection_contents]
     return image_ids
 
 
