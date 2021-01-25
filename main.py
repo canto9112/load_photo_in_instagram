@@ -18,8 +18,10 @@ if __name__ == "__main__":
 
     try:
         fetch_spacex.fetch_spacex_images(folder_saving_images)
-        #fetch_hubble.fetch_images_habble(folder_saving_images)
-        upload_file.uploading_images(folder_saving_images, instagram_images_folder)
+    except IndexError:
+        fetch_hubble.fetch_images_habble(folder_saving_images)
+        utils.adjust_and_save_images(folder_saving_images, instagram_images_folder)
+        upload_file.upload_images_instagram(instagram_images_folder)
     finally:
         shutil.rmtree(folder_saving_images)
         shutil.rmtree(instagram_images_folder)

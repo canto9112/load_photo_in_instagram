@@ -1,23 +1,6 @@
-from pathlib import Path
-from PIL import Image
 import os
 from instabot import Bot
 import time
-import shutil
-
-
-def adjust_and_save_images(images_folder, upload_folder):
-    filepath = os.listdir(path=images_folder)
-    for filename in filepath:
-        name, extension = os.path.splitext(filename)
-        image = Image.open(f'{images_folder}/{filename}')
-        image.thumbnail((1080, 1080))
-        path = Path.cwd() / upload_folder / name
-        if image.mode != 'RGB':
-            ycbcr_image = image.convert('YCbCr')
-            ycbcr_image.save(f'{path}.jpg', 'JPEG')
-        else:
-            image.save(f'{path}.jpg', 'JPEG')
 
 
 def upload_images_instagram(folder):
@@ -29,8 +12,3 @@ def upload_images_instagram(folder):
     for file_name in filepath:
         bot.upload_photo(f'{folder}/{file_name}')
         time.sleep(60)
-
-
-def uploading_images(name_folder_save, name_folder_download):
-    adjust_and_save_images(name_folder_save, name_folder_download)
-    #upload_images_instagram(name_folder_download)
