@@ -3,12 +3,10 @@ from instabot import Bot
 import time
 
 
-def upload_images_instagram(folder):
-    password_inst = os.getenv('ISTAGRAM_PASSWORD')
-    login_inst = os.getenv('INSTAGRAM_LOGIN')
+def upload_images_instagram(folder, login, password):
     filenames = os.listdir(path=folder)
     bot = Bot()
-    bot.login(username=login_inst, password=password_inst)
+    bot.login(username=login, password=password)
     for filename in filenames:
         bot.upload_photo(f'{folder}/{filename}')
         time.sleep(60)
