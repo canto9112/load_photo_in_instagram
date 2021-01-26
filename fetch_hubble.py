@@ -22,10 +22,9 @@ def get_habble_image_ids(url, collection_name):
     return image_ids
 
 
-def fetch_images_habble(name_folder_save):
-    habble_collection_name = os.getenv('HABBLE_COLLECTION_NAME')
+def fetch_images_habble(name_folder_save, collection_name):
     habble_collections_api_url = 'http://hubblesite.org/api/v3/images'
-    habble_image_ids = get_habble_image_ids(habble_collections_api_url, habble_collection_name)
+    habble_image_ids = get_habble_image_ids(habble_collections_api_url, collection_name)
     for link_number, link in enumerate(habble_image_ids):
         habble_api_url = 'http://hubblesite.org/api/v3/image/{}'.format(link)
         image_last_link = get_image_last_link(habble_api_url)
