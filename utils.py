@@ -19,8 +19,8 @@ def get_file_extension(url):
 
 
 def adjust_and_save_images(images_folder, upload_folder):
-    filepath = os.listdir(path=images_folder)
-    for filename in filepath:
+    filenames = os.listdir(path=images_folder)
+    for filename in filenames:
         name, extension = os.path.splitext(filename)
         image = Image.open(f'{images_folder}/{filename}')
         image.thumbnail((1080, 1080))
