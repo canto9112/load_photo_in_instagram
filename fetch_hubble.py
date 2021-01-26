@@ -7,9 +7,7 @@ def get_image_last_link(url):
     response = requests.get(url, verify=False)
     response.raise_for_status()
     image_files = response.json()['image_files']
-    for image in image_files:
-        # image_last_link = ('http:'+image['file_url'])
-        image_last_link = f'http:{image["file_url"]}'
+    image_last_link = f'http:{image_files[-1]["file_url"]}'
     return image_last_link
 
 
