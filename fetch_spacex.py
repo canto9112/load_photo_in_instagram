@@ -13,7 +13,7 @@ def fetch_spacex_launch_urls(url, flight_number):
 def fetch_spacex_images(folder_name, spacex_flight_number='220'):
     url_spacex_api = 'https://api.spacexdata.com/v3/launches'
     filename_template = 'spacex-{}.jpg'
-    spacex_last_launch_url = fetch_spacex_launch_urls(url_spacex_api, spacex_flight_number)
-    for link_number, link in enumerate(spacex_last_launch_url):
+    spacex_launch_urls = fetch_spacex_launch_urls(url_spacex_api, spacex_flight_number)
+    for link_number, link in enumerate(spacex_launch_urls):
         spacex_image_name = filename_template.format(link_number)
         utils.save_image(link, spacex_image_name, folder_name)
