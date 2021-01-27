@@ -11,9 +11,9 @@ import os
 def main():
     load_dotenv()
 
-    ISTAGRAM_PASSWORD = os.getenv('ISTAGRAM_PASSWORD')
-    INSTAGRAM_LOGIN = os.getenv('INSTAGRAM_LOGIN')
-    HABBLE_COLLECTION_NAME = os.getenv('HABBLE_COLLECTION_NAME')
+    instagram_password = os.getenv('ISTAGRAM_PASSWORD')
+    instagram_login = os.getenv('INSTAGRAM_LOGIN')
+    habble_collection_name = os.getenv('HABBLE_COLLECTION_NAME')
 
     images_saving_folder = "images"
     instagram_images_folder = 'images_to_download'
@@ -23,11 +23,11 @@ def main():
 
     try:
         fetch_spacex.fetch_spacex_images(images_saving_folder)
-        fetch_hubble.fetch_images_habble(images_saving_folder, HABBLE_COLLECTION_NAME)
+        fetch_hubble.fetch_images_habble(images_saving_folder, habble_collection_name)
         utils.adjust_and_save_images(images_saving_folder, instagram_images_folder)
-        upload_file.upload_images_instagram(instagram_images_folder, INSTAGRAM_LOGIN, ISTAGRAM_PASSWORD)
+        upload_file.upload_images_instagram(instagram_images_folder, instagram_login, instagram_password)
     except IndexError:
-        fetch_hubble.fetch_images_habble(images_saving_folder, HABBLE_COLLECTION_NAME)
+        fetch_hubble.fetch_images_habble(images_saving_folder, habble_collection_name)
     finally:
         shutil.rmtree(images_saving_folder)
         shutil.rmtree(instagram_images_folder)
