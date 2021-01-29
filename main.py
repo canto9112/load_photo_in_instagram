@@ -1,5 +1,6 @@
 import fetch_spacex
 import fetch_hubble
+import fetch_NASA
 import utils
 import upload_file
 from dotenv import load_dotenv
@@ -22,6 +23,7 @@ def main():
     Path(instagram_images_folder).mkdir(parents=True, exist_ok=True)
 
     try:
+        fetch_NASA.fetch_nasa_images(images_saving_folder)
         fetch_spacex.fetch_spacex_images(images_saving_folder)
         fetch_hubble.fetch_images_habble(images_saving_folder, habble_collection_name)
         utils.adjust_and_save_images(images_saving_folder, instagram_images_folder)

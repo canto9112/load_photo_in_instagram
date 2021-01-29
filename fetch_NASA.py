@@ -1,4 +1,3 @@
-# Попробуем вытащить фотки с НАСА
 import requests
 import os
 from datetime import date, timedelta
